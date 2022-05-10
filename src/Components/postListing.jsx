@@ -5,42 +5,46 @@ import { postsContext } from "../App";
 const PostListing = () => {
     const usersContext = useContext(postsContext);
     const [popupStatus, setPopupStatus] = useState(false)
-    const [modalTitle,setModalTitle]=useState("Title")
-    const [modalDetail,setModalDetail]=useState("SelfText")
-    const showPopup = (title,detail) => {
+    const [modalTitle, setModalTitle] = useState("Title")
+    const [modalDetail, setModalDetail] = useState("SelfText")
+    const showPopup = (title, detail) => {
         setPopupStatus(true)
         setModalTitle(title)
         setModalDetail(detail)
     }
-    const closePopup=()=>{
+    const closePopup = () => {
         setPopupStatus(false)
     }
 
     return (
         <div>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col" style={{ borderRight: "2px solid lightgray" }}>#</th>
-                        <th scope="col" style={{ borderRight: "2px solid lightgray" }}>Title</th>
-                        <th scope="col">Selftext</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {usersContext.posts.map((list, index) => {
-                        return <tr key={index}>
-                            <th scope="row" style={{ borderRight: "2px solid lightgray" }}>{index + 1}</th>
-                            <td style={{ borderRight: "2px solid lightgray" }} className="posts" onClick={()=>{showPopup(list.data.title,list.data.selftext)}}>
-                                {list.data.title}
-                                {popupStatus == true && (
-                                    <popup />
-                                )}
-                            </td>
-                            <td>{list.data.selftext == "" ? "N/A" : list.data.selftext}</td>
-                        </tr>
-                    })}
-                </tbody>
-            </table>
+            {
+                usersContext.posts.length > 0 ?
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" style={{ borderRight: "2px solid lightgray" }}>#</th>
+                                <th scope="col" style={{ borderRight: "2px solid lightgray" }}>Title</th>
+                                <th scope="col">Selftext</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {usersContext.posts.map((list, index) => {
+                                return <tr key={index}>
+                                    <th scope="row" style={{ borderRight: "2px solid lightgray" }}>{index + 1}</th>
+                                    <td style={{ borderRight: "2px solid lightgray" }} className="posts" onClick={() => { showPopup(list.data.title, list.data.selftext) }}>
+                                        {list.data.title}
+                                        {popupStatus == true && (
+                                            <popup />
+                                        )}
+                                    </td>
+                                    <td>{list.data.selftext == "" ? "N/A" : list.data.selftext}</td>
+                                </tr>
+                            })}
+                        </tbody>
+                    </table>
+                    : "No record found."
+            }
             {popupStatus == true && (
                 <div className='popup d-flex justify-content-center align-items-center'>
                     <div className='w-50 bg-white p-3' style={{ borderRadius: "10px" }}>
